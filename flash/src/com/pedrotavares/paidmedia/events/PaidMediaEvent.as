@@ -1,0 +1,1 @@
+﻿package paidMedia.flashAS3.events{	import flash.events.Event;		public class PaidMediaEvent extends Event	{				public static var CLICK_CLICKTAG			:String = "PaidMediaEvent_ClickClickTag";		public function PaidMediaEvent( eventType :String, bubbles :Boolean = true, cancelable :Boolean = false)		{			super( eventType, bubbles, cancelable );		}	}}
