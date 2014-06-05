@@ -1,0 +1,1 @@
+﻿package {	import com.pedrotavares.paidmedia.platforms.doubleclick.DoubleclickLoader;	public class LoaderMain extends DoubleclickLoader	{		public function LoaderMain()		{			//trace("[MAIN] All good");			// The bellow string should be the name of the child swf to load and the date to use			init("doubleclick_video.swf", holder_mc );		}	}}
