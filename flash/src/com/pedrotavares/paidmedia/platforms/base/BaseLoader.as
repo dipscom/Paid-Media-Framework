@@ -1,0 +1,1 @@
+﻿package com.pedrotavares.paidmedia.platforms.base{	// CUSTOM CLASSE IMPORTS	import com.pedrotavares.paidmedia.events.PaidMediaEvent;	// FLASH IMPORTS	import flash.display.MovieClip;	import flash.display.Stage;	import flash.events.Event;	import flash.events.MouseEvent;	public class BaseLoader	{		public function BaseLoader()		{			// constructor code		}	}}
