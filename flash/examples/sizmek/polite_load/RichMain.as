@@ -1,1 +1,1 @@
-﻿package {	import com.pedrotavares.paidmedia.platforms.sizmek.*;		import flash.events.Event;	public class RichMain extends EbRich	{		public function RichMain()		{			trace("[RICH] All good"); 		}				private function startAd():void		{			startEbRich();		}	}}
+﻿package {	import com.pedrotavares.paidmedia.platforms.sizmek.*;		import flash.events.Event;	public class RichMain extends RichUnit	{		public function RichMain()		{			trace("[RICH] All good"); 		}	}}

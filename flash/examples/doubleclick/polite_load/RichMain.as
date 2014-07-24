@@ -1,1 +1,1 @@
-﻿package {	import com.pedrotavares.paidmedia.platforms.doubleclick.DoubleclickRich;		import flash.events.Event;	public class RichMain extends DoubleclickRich	{		public function RichMain()		{			trace("[RICH] All good"); 		}	}}
+﻿package {	import com.pedrotavares.paidmedia.platforms.doubleclick.*;		import flash.events.Event;	public class RichMain extends RichUnit	{		public function RichMain()		{			trace("[RICH] All good"); 		}	}}
