@@ -1,1 +1,2 @@
-﻿package {	/*		THIS WHOLE CLASS SEEMS TO BE REDUNDANT	DOUBLE CHECK IT				*/	import com.pedrotavares.paidmedia.platforms.sizmek.*;	public class LoaderMain extends PoliteLoader	{		public function LoaderMain()		{			//trace("[MAIN] All good");			// The bellow string should be the name of the child swf to load and the date to use			//init("sizmek_rich.swf", holder_mc);		}	}}
+﻿package {	import com.pedrotavares.paidmedia.platforms.sizmek.*;	public class LoaderMain extends PoliteLoader	{		public function LoaderMain()		{			//trace("[MAIN] All good");
+			// Do nothing, the extended PoliteLoader class is initiating the components		}	}}

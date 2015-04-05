@@ -1,1 +1,2 @@
-﻿package {	import com.pedrotavares.paidmedia.platforms.sizmek.*;		import flash.events.Event;	public class RichMain extends RichUnit	{		public function RichMain()		{			trace("[RICH] All good"); 		}	}}
+﻿package {	import com.pedrotavares.paidmedia.platforms.sizmek.*;		import flash.events.Event;	public class RichMain extends RichUnit	{		public function RichMain()		{			trace("[RICHMAIN] All good");
+			// Do nothing, the extended RichUnit class is initiating the components 		}	}}
