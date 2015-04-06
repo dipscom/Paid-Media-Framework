@@ -1,1 +1,5 @@
-﻿package {	// Custom imports	import com.pedrotavares.paidmedia.events.PaidMediaEvent;	import com.pedrotavares.paidmedia.platforms.doubleclick.*;	import flash.display.MovieClip;	public class LoaderMain extends PoliteLoaderLBox	{		public function LoaderMain()		{			// constructor code			trace("all good");			politeLoad( "child.swf", holder_mc, 300, 250, 970, 250, "lightbox.swf" );		}	}}
+﻿package {	import com.pedrotavares.paidmedia.platforms.doubleclick.*;	public class LoaderMain extends PoliteLoaderLBox	{		public function LoaderMain()
+		{
+			//trace("[MAIN] All good");
+			// Do nothing, the extended PoliteLoaderLBox class is initiating the components
+		}	}}
