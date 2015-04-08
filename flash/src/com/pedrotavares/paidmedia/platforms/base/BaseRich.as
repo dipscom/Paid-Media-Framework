@@ -73,12 +73,6 @@ package com.pedrotavares.paidmedia.platforms.base
 				border.graphics.lineStyle(1, brdr_clr, 1, true, "normal", "none", "miter");
 				border.graphics.drawRect(0, 0, this.width-1, this.height-1);
 				addChild(border);
-				/********************
-					TO DO:
-					Find a way to have this border only detecting the rich unit's size
-					currently it takes in the parent's stage size which, causes the
-					border to be too wide/high when working with expanding creatives
-				**********************/
 			}
 			// Initiate the main clicktag
 			clicktag_mc = new MovieClip();
