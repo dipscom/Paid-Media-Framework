@@ -1,1 +1,265 @@
-﻿package com.pedrotavares.paidmedia.platforms.doubleclick{	// CUSTOM CLASSE IMPORTS	import com.pedrotavares.paidmedia.platforms.doubleclick.*;	import com.pedrotavares.paidmedia.events.PaidMediaEvent;	// DOUBLECLICK IMPORTS	import com.google.ads.studio.events.StudioVideoEvent;	import com.google.ads.studio.events.StudioEvent;	import com.google.ads.studio.video.*;	// FLASH IMPORTS	import flash.display.MovieClip;	import flash.events.Event;	import flash.events.MouseEvent;	public class RichVideo extends RichUnit	{		// Video Vars		private var vidPlayerInstance			:VideoPlayerAdvanced;		private var playlist					:Playlist;		private var _videoController			:EnhancedVideoController;// Move this into a function so can be created multiple times		private var _videoController_1			:EnhancedVideoController;// Move this into a function so can be created multiple times		private var currCntrl					:EnhancedVideoController;// Var to store the currentVideoController - See what type it should be				protected var isVidPlaying				:Boolean;// Look into changing this into a call to the videoPlayerInstance		protected var isMuted					:Boolean;// Look into changing this into a call to the videoPlayerInstance			protected var vids						:Array;// Maybe an obejct? Look into it - Its attributes to replace the bellow		protected var vidEntry					:String;		protected var vidName					:String;		protected var videoHolder				:MovieClip;		protected var vidCntrl					:MovieClip;		protected var vidSound					:MovieClip;		protected var vidRply					:MovieClip;		protected var vidWidth					:int;		protected var vidHeight					:int;		protected var vidX						:int;		protected var vidY						:int;		public function RichVideo()		{			// constructor code			trace("[VIDEO] All good");		}		protected function setupVideo( vidEntry:String, videoHolder:MovieClip, vidCntrl:MovieClip, vidSound:MovieClip, vidRply:MovieClip, vidWidth:int=100, vidHeight:int=100, vidX:int=0, vidY:int=0 ):void		{			trace("[VIDEO] SetupVideo");			/* TO DO:			Add a way to have multiple videos per ad - maybe a separate class for it?			Try to have an Array to grab the different video entries			Find out why, on replay, the second video does not track when not having any of the videos played			*/			// Define video stats for future use:			this.vidEntry = vidEntry;			this.videoHolder = videoHolder;			this.vidCntrl = vidCntrl; 			this.vidSound = vidSound;			this.vidRply = vidRply;						// Video Player setup			vidPlayerInstance = new VideoPlayerAdvanced();			// Define the Video Player's initial size and position			videoProperties( vidWidth, vidHeight, vidX, vidY )			// Add it to the video holder on the display stack			videoHolder.addChild( vidPlayerInstance );						// Make sure the video controls are on the correct frame			vidCntrl.gotoAndStop(1);			vidSound.gotoAndStop(1);			vidRply.gotoAndStop(1);			// Put the clicktag on top of the video			// The clicktag instance comes from the "RichUnit.as" class			addChild( clicktag_mc );			// Put the video controls on top of the clicktag			addChild( vidCntrl );			addChild( vidSound );			addChild( vidRply );			// Event listeners			// Wait until the Video Player has initialized			vidPlayerInstance.addEventListener( StudioEvent.INIT, videoInit );			// Move these listeners into after the vidPlayerInstance has initiated			// Consider adding a buffering listener			// Add a loading animation while buffering			//			// Cue points;			vidPlayerInstance.addEventListener( StudioVideoEvent.NET_STREAM_CUE_POINT, onCue );// Check to see if this is still working			// Do a check to see if the video controls are required or not			// in order to have videos without controlers if desired			// Video controls			vidCntrl.addEventListener( MouseEvent.CLICK, toggleVideo );			vidSound.addEventListener( MouseEvent.CLICK, toggleSound );			// Video replay			vidRply.addEventListener( MouseEvent.CLICK, replayVideo );			vidRply.addEventListener( MouseEvent.MOUSE_OVER, videoMouseOver );			vidRply.addEventListener( MouseEvent.MOUSE_OVER, videoMouseOut );			// Enable button behaviour			vidCntrl.buttonMode = vidSound.buttonMode = vidRply.buttonMode = true;			vidCntrl.mouseChildren = vidSound.mouseChildren = vidRply.mouseChildren = false;		}				private function videoInit( e:StudioEvent ):void		{			trace("[VIDEO] video has initialised");						// Playlist setup			playlist = vidPlayerInstance.getPlaylist();			// Stops the playlist from autoplaying all items;			playlist.setAutoAdvanceVideoOnComplete( false );			// Starts the videos muted;			playlist.setStartMuted( true );						/* Move this into a "createVideoEntry" function 				making sure it gets pushed into the vids array			*/			// Create a video entry			var videoEntry = new VideoEntry( vidEntry );			// Create a new video controller			_videoController = new EnhancedVideoController();			// Assign the video entry to the video controller			_videoController.addVideoEntry( videoEntry );			// Set the video object			_videoController.setVideoObject( vidPlayerInstance.getVideoObject() );			//			_videoController.setReportingIdentifier( vidEntry );			// The volume is set to nothing			isMuted = true;			// Make sure the video will not show once complete			_videoController.setVideoCompleteDisplay( EnhancedVideoController.VIDEO_COMPLETE_HIDE_VIDEO );// This might not be needed as it's the default setting			// Set the callback for when the video is complete			_videoController.setVideoCompleteCallback( onVideoEnd );			// Add the video item to the end of the playlist.			vidPlayerInstance.getPlaylist().addVideoController( _videoController );						// Update the current video controller			currCntrl = getCurrCntrl();						// Dispatch the VIDEO_INITIALISED event			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.VIDEO_INITIALISED ) );		}				private function addVideo():EnhancedVideoController		{			// Create a video entry			var videoEntry = new VideoEntry( vidEntry );			// Create a new video controller			_videoController = new EnhancedVideoController();			// Assign the video entry to the video controller			_videoController.addVideoEntry( videoEntry );			// Set the video object			_videoController.setVideoObject( vidPlayerInstance.getVideoObject() );			//			_videoController.setReportingIdentifier( vidEntry );			// The volume is set to nothing			isMuted = true;			// Make sure the video will not show once complete			_videoController.setVideoCompleteDisplay( EnhancedVideoController.VIDEO_COMPLETE_HIDE_VIDEO );// This might not be needed as it's the default setting			// Set the callback for when the video is complete			_videoController.setVideoCompleteCallback( onVideoEnd );			// Add the video item to the end of the playlist.			vidPlayerInstance.getPlaylist().addVideoController( _videoController );		}				protected function videoProperties( vidWidth:int=100, vidHeight:int=100, vidX:int=0, vidY:int=0 ):void		{			// Resize the video accordingly			vidPlayerInstance.width = vidWidth;			vidPlayerInstance.height = vidHeight;			vidPlayerInstance.x = vidX;			vidPlayerInstance.y = vidY;		}				protected function addExtraVideo( vidEntry:String ):void		{			/* TO DO			Remove the width, height, x, y properties from this function and from the videoInit			move them all to a separate function videoProperties to be able to call whenever needed			*/			trace( "[VIDEO] Add a new video to the playlist");			// Create a video entry;			var videoEntry = new VideoEntry( vidEntry );			// Create a new video controller			_videoController_1 = new EnhancedVideoController();			// Assign the video entry to the video controller			_videoController_1.addVideoEntry( videoEntry );			// Set the video object			_videoController_1.setVideoObject( vidPlayerInstance.getVideoObject() );			//			_videoController_1.setReportingIdentifier( vidEntry );			// Set the volume to nothing			//_videoController.setVolume(0);			isMuted = true;			// Make sure the video will not show once complete			_videoController_1.setVideoCompleteDisplay( EnhancedVideoController.VIDEO_COMPLETE_HIDE_VIDEO );			// Set the callback for when the video is complete			_videoController_1.setVideoCompleteCallback( onVideoEnd );			// Add the video item to the end of the playlist.			vidPlayerInstance.getPlaylist().addVideoController( _videoController_1 );		}				protected function jumpToVideo( vidNum:int ):void		{			trace("[VIDEO] Skipping to ", vidNum );			playlist.skipTo(vidNum);			// Update the current video controller			currCntrl = playlist.getCurrentVideoController()		}				private function getCurrCntrl():EnhancedVideoController		{			currCntrl = playlist.getCurrentVideoController()			return currCntrl;		}				protected function startPlaylist( auto:Boolean=false, muted:Boolean=true ):void		{			trace("[VIDEO] Start the playlist");			// Update the current video controller			currCntrl = getCurrCntrl();			currCntrl.play();		}		override protected function onClick( e:PaidMediaEvent ):void		{			trace("[VIDEO] Main clicktag");			// Bring in the functionality from the overriden method			super.onClick( e );			// Check to see if the video is paused			var currState = currCntrl.getPlayerState();			trace("[VIDEO] CURRENT STATE IS " + currState )			// Check the video current state			switch ( currState.getStateType() )			{				case StoppedState:					// If video is stopped, do nothing				break;												default:					// If video is anything but stopped, stop it					stopVideo();				break;			}		}		protected function videoMouseOver( e:MouseEvent ):void		{			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.MOUSE_OVER ) );		}				protected function videoMouseOut( e:MouseEvent ):void		{			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.MOUSE_OUT ) );		}				protected function playVideo():void		{			//trace("[VIDEO] Play video");			// The video is now playing			isVidPlaying = true;			// Toggles which movie clip to show			vidCntrl.gotoAndStop(1);			// Play the video			currCntrl.play();		}		protected function pauseVideo():void		{			isVidPlaying = false;			// Toggles which movie clip to show			vidCntrl.gotoAndStop(2);			// Pause the video;			currCntrl.pause();		}		protected function replayVideo( e:MouseEvent ):void		{			// Check to see if the video is paused						trace("[VIDEO] Replay Clicked");			// Tell the rest of the ad that the replay has been clicked			dispatchEvent(new PaidMediaEvent(PaidMediaEvent.VIDEO_REPLAY));			// Update the current videoController			currCntrl = getCurrCntrl();			// Trigger the user counter in DC			currCntrl.replay();			// Make sure the player is visible			vidPlayerInstance.visible = true;			// The video is now playing			isVidPlaying = true;			// Unmute the video if muted			if( currCntrl.getVolume() == 0 )			{				unmuteVideo();			}					}				private function vidStats( e:Event ):void		{			// Check to see if the video is paused			currCntrl = playlist.getCurrentVideoController()			var currState = currCntrl.getPlayerState();			var identify = currCntrl.getReportingIdentifier();			trace("[VIDEO] ", identify, currState )		}		private function toggleVideo( e:MouseEvent ):void		{			// Check to see if the video is paused			var currState = currCntrl.getPlayerState();			trace("[VIDEO] Video toggle", currState);			// Check the video current state			switch ( currState.getStateType() )			{				case "PlayingState":					trace("Pause it");					// If video is playing, pause it					pauseVideo();				break;												case "PausedState":					trace("Play it");					// If video is paused, play it					playVideo();				break;			}		}		private function toggleSound( e:MouseEvent ):void		{			// Checks to see if it should mute or unmute			if (isMuted)			{				//trace("Unmute it");				// Yes it is, unmute it				unmuteVideo();			}			else			{				//trace("Mute it");				// No it isn't, mute it				muteVideo();			}		}		protected function muteVideo():void		{			isMuted = true;			// Mute the video			currCntrl.mute();			// Toggles which movie clip to show;			vidSound.gotoAndStop(1);		}		protected function unmuteVideo():void		{			isMuted = false;			// Unmute the video			currCntrl.unmute();			// Toggles which movie clip to show;			vidSound.gotoAndStop(2);		}		private function onCue( e:StudioVideoEvent ):void		{			//trace("[VIDEO] Cue");			// Dispatch the event to be heard			dispatchEvent(new PaidMediaEvent(PaidMediaEvent.ON_VIDEO_CUE));		}				private function onVideoEnd( e:StudioVideoEvent=null ):void		{			trace("[VIDEO] Video is now over");			// Video is no longer playing			isVidPlaying = false;			// Dispatch the event to be heard			dispatchEvent(new PaidMediaEvent(PaidMediaEvent.ON_VIDEO_END));		}		protected function stopVideo():void		{			// Hide video			vidPlayerInstance.visible = false;			// Make sure the video stops no matter what			currCntrl.stop();			// Dispatch the event the video is over			onVideoEnd();		}	}}
+package com.pedrotavares.paidmedia.platforms.doubleclick { 
+	// CUSTOM CLASSE IMPORTS
+	import com.pedrotavares.paidmedia.platforms.doubleclick.*;
+	import com.pedrotavares.paidmedia.events.PaidMediaEvent; 
+	// DOUBLECLICK IMPORTS
+	import com.google.ads.studio.events.StudioVideoEvent;
+	import com.google.ads.studio.events.StudioEvent;
+	import com.google.ads.studio.video.*; 
+	// FLASH IMPORTS
+	import flash.display.MovieClip;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	
+	public class RichVideo extends RichUnit { 
+		// Video Vars
+		private var vidPlayerInstance	: VideoPlayerAdvanced; 
+		//private var playlist			:Playlist;
+		private var _videoController	: EnhancedVideoController; // Move this into a function so can be created multiple times
+		protected var isVidPlaying		: Boolean; // Look into changing this into a call to the videoPlayerInstance
+		protected var isMuted			: Boolean; // Look into changing this into a call to the videoPlayerInstance
+		protected var vids				: Array; // Maybe an obejct? Look into it - Its attributes to replace the bellow
+		protected var vidEntry			: String;
+		protected var vidName			: String;
+		protected var videoHolder		: MovieClip;
+		protected var vidCntrl			: MovieClip;
+		protected var vidSound			: MovieClip;
+		protected var vidRply			: MovieClip;
+		protected var vidWidth			: int;
+		protected var vidHeight			: int;
+		protected var vidX				: int;
+		protected var vidY				: int;
+		
+		public function RichVideo() { 
+			trace("[VIDEO] All good");
+		}
+		
+		protected function setupVideo(vidEntry: String, videoHolder: MovieClip, vidWidth: int = 100, vidHeight: int = 100, vidX: int = 0, vidY: int = 0, vidCntrl: MovieClip = null, vidSound: MovieClip = null, vidRply: MovieClip = null): void {
+			trace("[VIDEO] SetupVideo"); 
+			// Define video stats for future use:
+			this.vidEntry = vidEntry;
+			this.videoHolder = videoHolder;
+			this.vidCntrl = vidCntrl;
+			this.vidSound = vidSound;
+			this.vidRply = vidRply;
+			
+			// Video Player setup
+			vidPlayerInstance = new VideoPlayerAdvanced(); 
+			// Define the Video Player's initial size and position
+			videoProperties(vidWidth, vidHeight, vidX, vidY)
+			// Add it to the video holder on the display stack
+			videoHolder.addChild(vidPlayerInstance);
+
+			// Create a new video controller
+			_videoController = new EnhancedVideoController();
+			// Set the reporting identifier
+			var identifier = vidEntry.toString();
+			_videoController.setReportingIdentifier(identifier);
+			// Wait until the Video Player has initialized
+			vidPlayerInstance.addEventListener(StudioEvent.INIT, videoInit);
+			// Does vidCntrl exist?
+			if (vidCntrl) {
+				// Make sure the video controls is on the correct frame
+				vidCntrl.gotoAndStop(1);
+				// Add the event listener if it does
+				vidCntrl.addEventListener(MouseEvent.CLICK, toggleVideo);
+				vidCntrl.buttonMode = true;
+				vidCntrl.mouseChildren = false;
+			}
+
+			// Does vidSound exist?
+			if (vidSound) {
+				// Make sure the video controls is on the correct frame
+				vidSound.gotoAndStop(1);
+				// Add the event listener if it does
+				vidSound.addEventListener(MouseEvent.CLICK, toggleSound);
+				vidSound.buttonMode = true;
+				vidSound.mouseChildren = false;
+			}
+
+			// Does vidRply exist?
+			if (vidRply) {
+				// Make sure the video controls is on the correct frame
+				vidRply.gotoAndStop(1);
+				// Add the event listener if it does
+				vidRply.addEventListener(MouseEvent.CLICK, replayVideo);
+				vidRply.addEventListener(MouseEvent.MOUSE_OVER, videoMouseOver);
+				vidRply.addEventListener(MouseEvent.MOUSE_OVER, videoMouseOut);
+				vidRply.buttonMode = true;
+				vidRply.mouseChildren = false;
+			}
+		}
+
+		private function videoInit(e: StudioEvent): void {
+			trace("[VIDEO] video has initialised");
+			// Event listeners
+			// Consider adding a buffering listener
+
+			// Cue points;
+			vidPlayerInstance.addEventListener(StudioVideoEvent.NET_STREAM_CUE_POINT, onCue); // Check to see if this is still working
+			// Create a video entry
+			var videoEntry = new VideoEntry(vidEntry); 
+			// Assign the video entry to the video controller
+			_videoController.addVideoEntry(videoEntry); 
+			// Set the video object
+			_videoController.setVideoObject(vidPlayerInstance.getVideoObject()); // What is this for? 
+			// The volume is set to nothing by default
+			isMuted = true;
+			// Make sure the video will not show once complete
+			_videoController.setVideoCompleteDisplay(EnhancedVideoController.VIDEO_COMPLETE_HIDE_VIDEO);// This might not be needed as it's the default setting
+			// Set the callback for when the video is complete
+			_videoController.setVideoCompleteCallback(onVideoEnd);
+			// Dispatch the VIDEO_INITIALISED event
+			dispatchEvent(new PaidMediaEvent(PaidMediaEvent.VIDEO_INITIALISED));
+		}
+
+		protected function videoProperties(vidWidth: int = 100, vidHeight: int = 100, vidX: int = 0, vidY: int = 0): void {
+			// Resize the video accordingly
+			vidPlayerInstance.width = vidWidth;
+			vidPlayerInstance.height = vidHeight;
+			vidPlayerInstance.x = vidX;
+			vidPlayerInstance.y = vidY;
+		}
+
+		private function getState(): Object {
+			// Get the current state of the video
+			var currState = _videoController.getPlayerState();
+			trace("[VIDEO] CURRENT STATE IS " + currState)
+			return currState;
+		}
+
+		override protected function onClick(e: PaidMediaEvent): void {
+			trace("[VIDEO] Main clicktag");
+			// Bring in the functionality from the overriden method
+			super.onClick(e);
+			// Check the video current state
+			switch (getState()) {
+				case StoppedState:
+					// If video is stopped, do nothing
+					break;
+				default:
+					// If video is anything but stopped, stop it
+					stopVideo();
+					break;
+			}
+		}
+		
+		private function toggleVideo(e: MouseEvent): void {
+			// Check the video current state
+			switch (getState()) {
+				case PlayingState:
+					trace("[VIDEO] Pause it");
+					// If video is playing, pause it
+					pauseVideo();
+					break;
+				case PausedState:
+					trace("[VIDEO] Play it");
+					// If video is paused, play it
+					playVideo();
+					break;
+			}
+		}
+
+		protected function videoMouseOver(e: MouseEvent): void {
+			dispatchEvent(new PaidMediaEvent(PaidMediaEvent.MOUSE_OVER));
+		}
+
+		protected function videoMouseOut(e: MouseEvent): void {
+			dispatchEvent(new PaidMediaEvent(PaidMediaEvent.MOUSE_OUT));
+		}
+
+		protected function playVideo(): void { 
+			//trace("[VIDEO] Play video"); 
+			// The video is now playing
+			isVidPlaying = true;
+			// Play the video
+			_videoController.play();
+			if (vidCntrl) {
+				// Toggles which movie clip to show
+				vidCntrl.gotoAndStop(1);
+			}
+		}
+
+		protected function pauseVideo(): void {
+			isVidPlaying = false;
+			if (vidCntrl) {
+				// Toggles which movie clip to show
+				vidCntrl.gotoAndStop(2);
+			}
+			// Pause the video;
+			_videoController.pause();
+		}
+
+		protected function replayVideo(e: MouseEvent): void {		
+			trace("[VIDEO] Replay Clicked");
+			// Tell the rest of the ad that the replay has been clicked
+			dispatchEvent(new PaidMediaEvent(PaidMediaEvent.VIDEO_REPLAY)); 
+			// Trigger the user counter in DC
+			_videoController.replay();
+			// Make sure the player is visible
+			vidPlayerInstance.visible = true;
+			// The video is now playing
+			isVidPlaying = true;
+			// Unmute the video if muted
+			if (_videoController.getVolume() == 0) {
+				unmuteVideo();
+			}
+		}
+
+		private function toggleSound(e: MouseEvent): void {
+			// Checks to see if it should mute or unmute
+			if (isMuted) {
+				//trace("[VIDEO] Unmute it");
+				// Yes it is, unmute it
+				unmuteVideo();
+			} else {
+				//trace("[VIDEO] Mute it");
+				// No it isn't, mute it
+				muteVideo();
+			}
+		}
+		
+		protected function muteVideo(): void {
+			isMuted = true;
+			// Mute the video
+			_videoController.mute();
+			if(vidSound) {
+				// Toggles which movie clip to show;
+				vidSound.gotoAndStop(1);
+			}
+		}
+		
+		protected function unmuteVideo(): void {
+			isMuted = false;
+			// Unmute the video
+			_videoController.unmute();
+			if(vidSound) {
+				// Toggles which movie clip to show;
+				vidSound.gotoAndStop(2);
+			}
+		}
+		
+		private function onCue(e: StudioVideoEvent): void {
+			trace("[VIDEO] Cue");
+			// Dispatch the event to be heard
+			dispatchEvent(new PaidMediaEvent(PaidMediaEvent.ON_VIDEO_CUE));
+		}
+		
+		private function onVideoEnd(e: StudioVideoEvent = null): void {
+			trace("[VIDEO] Video is now over");
+			// Video is no longer playing
+			isVidPlaying = false;
+			// Dispatch the event to be heard
+			dispatchEvent(new PaidMediaEvent(PaidMediaEvent.ON_VIDEO_END));
+		}
+
+		protected function stopVideo(): void {
+			// Hide video
+			vidPlayerInstance.visible = false;
+			// Make sure the video stops no matter what
+			_videoController.stop();
+			// Dispatch the event the video is over
+			onVideoEnd();
+		}
+	}
+}
