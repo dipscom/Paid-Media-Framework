@@ -141,7 +141,7 @@ package com.pedrotavares.paidmedia.platforms.doubleclick {
 			}
 		}
 		
-		private function toggleVideo(e: MouseEvent): void {
+		protected function toggleVideo(e: MouseEvent): void {
 			// Check the video current state
 			var state = getState();
 			if( state is PlayingState ) {
@@ -201,7 +201,7 @@ package com.pedrotavares.paidmedia.platforms.doubleclick {
 			}
 		}
 
-		private function toggleSound(e: MouseEvent): void {
+		protected function toggleSound(e: MouseEvent): void {
 			// Checks to see if it should mute or unmute
 			if (isMuted) {
 				//trace("[VIDEO] Unmute it");
