@@ -103,8 +103,8 @@ package com.pedrotavares.paidmedia.platforms.doubleclick {
 			_videoController.addVideoEntry(videoEntry); 
 			// Set the video object
 			_videoController.setVideoObject(vidPlayerInstance.getVideoObject()); // What is this for? 
-			// The volume is set to nothing by default
-			isMuted = true;
+			// The video should be muted by default
+			muteVideo();
 			// Make sure the video will not show once complete
 			_videoController.setVideoCompleteDisplay(EnhancedVideoController.VIDEO_COMPLETE_HIDE_VIDEO);// This might not be needed as it's the default setting
 			// Set the callback for when the video is complete
@@ -133,30 +133,25 @@ package com.pedrotavares.paidmedia.platforms.doubleclick {
 			// Bring in the functionality from the overriden method
 			super.onClick(e);
 			// Check the video current state
-			switch (getState()) {
-				case StoppedState:
-					// If video is stopped, do nothing
-					break;
-				default:
-					// If video is anything but stopped, stop it
-					stopVideo();
-					break;
+			var state = getState();
+			if( state is PlayingState ) {
+				trace("[VIDEO] Stop it");
+				// Video is playing, stop it
+				stopVideo();
 			}
 		}
 		
 		private function toggleVideo(e: MouseEvent): void {
 			// Check the video current state
-			switch (getState()) {
-				case PlayingState:
-					trace("[VIDEO] Pause it");
-					// If video is playing, pause it
-					pauseVideo();
-					break;
-				case PausedState:
-					trace("[VIDEO] Play it");
-					// If video is paused, play it
-					playVideo();
-					break;
+			var state = getState();
+			if( state is PlayingState ) {
+				trace("[VIDEO] Pause it");
+				// Video is playing, pause it
+				pauseVideo();
+			} else {
+				trace("[VIDEO] Play it");
+				// Video is paused, play it
+				playVideo();
 			}
 		}
 
