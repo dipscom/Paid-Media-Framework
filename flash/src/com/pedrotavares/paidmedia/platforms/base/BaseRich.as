@@ -81,7 +81,7 @@ package com.pedrotavares.paidmedia.platforms.base
 			clicktag_mc.graphics.beginFill(0xFF0000);
 			clicktag_mc.graphics.drawRect(0, 0, this.width, this.height);
 			clicktag_mc.graphics.endFill();
-			clicktag_mc.alpha = 0.5;
+			clicktag_mc.alpha = 0;
 			// Add mouse behaviour to the clicktag
 			addButtonBehaviour(clicktag_mc);
 			// Add the clicktag_mc to the stage
