@@ -15,10 +15,6 @@ package com.pedrotavares.paidmedia.platforms.base
 		
 		// Variable to hold the instance of the clicktag
 		protected var 		clicktag_mc					:MovieClip;
-		// Variables to create the border or not
-		private var 		border						:Shape;
-		private var 		brdr						:Boolean;
-		private var 		brdr_clr					:uint;
 		// Variable to hold the mcs on stage
 		private var 		mcs							:Array;
 
@@ -63,23 +59,32 @@ package com.pedrotavares.paidmedia.platforms.base
 		*	 Setup Methods
 		*
 		**********************/
-		private function startSetup():void
+		private function startSetup( brdr_clr:uint=0x000000, brdr:Boolean=true, w:Number=0, h:Number=0 ):void
 		{
+			// Check to see if there is w and h are being overriden
+			if( w === 0 || h === 0 ) {
+				// If w and h are zero,
+				// Use the stage's width and height
+				w = stage.stageWidth;
+				h = stage.stageHeight;
+			} 
+			
 			// Check to see if border is required
 			if( brdr )
 			{
 				// Draw a one pixel border automatically
-				border = new Shape();
+				var border = new Shape();
 				border.graphics.lineStyle(1, brdr_clr, 1, true, "normal", "none", "miter");
-				border.graphics.drawRect(0, 0, this.width-1, this.height-1);
+				border.graphics.drawRect(0, 0, w-1, h-1);
 				addChild(border);
+				trace("[BASERICH], Drawing border:", w, h);
 			}
 			// Initiate the main clicktag
 			clicktag_mc = new MovieClip();
 			// Clicktag details
 			clicktag_mc.name = "clicktag_mc";
 			clicktag_mc.graphics.beginFill(0xFF0000);
-			clicktag_mc.graphics.drawRect(0, 0, this.width, this.height);
+			clicktag_mc.graphics.drawRect(0, 0, w, h);
 			clicktag_mc.graphics.endFill();
 			clicktag_mc.alpha = 0;
 			// Add mouse behaviour to the clicktag
@@ -98,22 +103,19 @@ package com.pedrotavares.paidmedia.platforms.base
 			// Stop listening if this was added to stage
 			removeEventListener( Event.ADDED_TO_STAGE, onStage );
 			// Start the setup of the ad
-			startSetup();
+			startSetup();// TO DO >>>>> This needs some params
 		}
 		
-		protected function setupAd( brdr_clr:uint=0x000000, brdr:Boolean=true ):void
+		protected function setupAd( brdr_clr:uint=0x000000, brdr:Boolean=true, w:Number=0, h:Number=0 ):void
 		{
 			trace("[BASERICH] setupAd");
-			// Define the received values as global variables
-			this.brdr = brdr;
-			this.brdr_clr = brdr_clr;
 			// Check if stage exists
 			if( stage )
 			{
 				trace("[BASERICH] setupAd, already on stage");
 				// If the ad is already on stage
 				// start the setup of the ad
-				startSetup();
+				startSetup( brdr_clr, brdr, w, h );
 			} else {
 				trace("[BASERICH] setupAd, wait for ADDED_TO_STAGE");
 				// Listen for when the movieclip is added to stage
