@@ -15,8 +15,6 @@ package com.pedrotavares.paidmedia.platforms.base
 		
 		// Variable to hold the instance of the clicktag
 		protected var 		clicktag_mc					:MovieClip;
-		// Variable to hold the mcs on stage
-		private var 		mcs							:Array;
 
 		public function BaseRich():void
 		{
