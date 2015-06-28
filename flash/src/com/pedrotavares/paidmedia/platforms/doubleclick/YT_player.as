@@ -41,15 +41,15 @@ package com.pedrotavares.paidmedia.platforms.doubleclick
 
 		protected function setupVideo(	vidEntry	:String, 
 										videoHolder	:MovieClip, 
-										vidWidth	:int, 
-										vidHeight	:int, 
-										vidCntrl	:MovieClip = null, 
-										vidSound	:MovieClip = null, 
-										vidRply		:MovieClip = null, 
-										vidX		:int = 0, 
-										vidY		:int = 0, 
-										playType	:String = "preview",
-										cntrlType	:String = "autohide"
+										vidWidth	:int 			= 100, 
+										vidHeight	:int 			= 100,
+										vidX		:int 			= 0, 
+										vidY		:int 			= 0, 
+										vidCntrl	:MovieClip 		= null, 
+										vidSound	:MovieClip 		= null, 
+										vidRply		:MovieClip 		= null, 
+										playType	:String 		= "preview",
+										cntrlType	:String 		= "autohide"
 										):void
 		{
 			trace("[YTPLAYER] Video setup"); 
@@ -58,6 +58,7 @@ package com.pedrotavares.paidmedia.platforms.doubleclick
 			this.vidCntrl = vidCntrl;
 			this.vidSound = vidSound;
 			this.vidRply = vidRply;
+			
 			// Video Player setup
 			vidPlayerInstance = new YTPlayer();
 			vidPlayerInstance.proxy.videoId = vidEntry;
@@ -78,7 +79,6 @@ package com.pedrotavares.paidmedia.platforms.doubleclick
 			{
 			 	vidPlayerInstance.proxy.addEventListener("ready", ytPlayerReady);
 			}
-			
 			
 			// Does vidCntrl exist?
 			if (vidCntrl) {
@@ -174,6 +174,15 @@ package com.pedrotavares.paidmedia.platforms.doubleclick
 
 			// Add it to the stage
 			videoHolder.addChild( vidPlayerInstance );
+			
+			// Dispatch the VIDEO_INITIALISED event
+			dispatchEvent(new PaidMediaEvent(PaidMediaEvent.VIDEO_INITIALISED));
+		}
+		
+		override protected function onClick(e: PaidMediaEvent): void {
+			trace("[VIDEO] Main clicktag");
+			// Bring in the functionality from the overriden method
+			super.onClick(e);
 		}
 
 		protected function playVideo():void
@@ -181,8 +190,10 @@ package com.pedrotavares.paidmedia.platforms.doubleclick
 			trace("[YTPLAYER] Play video");
 			// The video is now playing
 			isVidPlaying = true;
-			// Toggles which movie clip to show
-			vidCntrl.gotoAndStop(1);
+			if (vidCntrl) {
+				// Toggles which movie clip to show
+				vidCntrl.gotoAndStop(1);
+			}
 			// Make sure the video is visible;
 			vidPlayerInstance.visible = true;
 			// Play the video
@@ -192,23 +203,27 @@ package com.pedrotavares.paidmedia.platforms.doubleclick
 		protected function pauseVideo():void
 		{
 			isVidPlaying = false;
-			// Toggles which movie clip to show
-			vidCntrl.gotoAndStop(2);
+			if (vidCntrl) {
+				// Toggles which movie clip to show
+				vidCntrl.gotoAndStop(2);
+			}
 			// Pause the video;
 			vidPlayerInstance.proxy.pause();
 		}
 
 		protected function replayVideo( e:MouseEvent ):void
 		{
-			//trace("Replay Clicked");
+			trace("[YTPLAYER] Replay Clicked");
 			/*// Hide replay button
 			vidRply.visible = false;*/
 			// Dispatch the event
 			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.VIDEO_REPLAY ) );
 			// The video is now playing
 			isVidPlaying = true;
-			// Toggles which movie clip to show
-			vidCntrl.gotoAndStop(1);
+			if (vidCntrl) {
+				// Toggles which movie clip to show
+				vidCntrl.gotoAndStop(1);
+			}
 			// Make sure the video is visible;
 			vidPlayerInstance.visible = true;
 			//Restart the video
@@ -263,8 +278,10 @@ package com.pedrotavares.paidmedia.platforms.doubleclick
 			isMuted = true;
 			// Mute the video
 			vidPlayerInstance.proxy.mute();
-			// Toggles which movie clip to show;
-			vidSound.gotoAndStop(1);
+			if(vidSound) {
+				// Toggles which movie clip to show;
+				vidSound.gotoAndStop(1);
+			}
 		}
 
 		protected function unmuteVideo():void
@@ -272,8 +289,10 @@ package com.pedrotavares.paidmedia.platforms.doubleclick
 			isMuted = false;
 			// Unmute the video
 			vidPlayerInstance.proxy.unMute();
-			// Toggles which movie clip to show;
-			vidSound.gotoAndStop(2);
+			if(vidSound) {
+				// Toggles which movie clip to show;
+				vidSound.gotoAndStop(2);
+			}
 		}
 
 		private function onCue( e:YTPlayerEvent ):void
