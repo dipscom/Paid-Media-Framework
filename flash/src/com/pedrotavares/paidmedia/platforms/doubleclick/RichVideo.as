@@ -136,7 +136,7 @@ package com.pedrotavares.paidmedia.platforms.doubleclick {
 			super.onClick(e);
 			// Check the video current state
 			var state = getState();
-			if( state is PlayingState ) {
+			if( !(state is StoppedState) ) {
 				trace("[VIDEO] Stop it");
 				// Video is playing, stop it
 				stopVideo();
