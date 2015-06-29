@@ -27,7 +27,7 @@ package com.pedrotavares.paidmedia.platforms.base
 		*	Mouse Methods 
 		*
 		**********************/
-		private function baseClick( e:MouseEvent ):void
+		protected function baseClick( e:MouseEvent ):void
 		{ 
 			trace("[BASERICH] Click");
 			// Check to see if the target was the main clicktag
@@ -39,13 +39,13 @@ package com.pedrotavares.paidmedia.platforms.base
 			}
 		}
 		
-		private function baseMouseOver(e:MouseEvent):void
+		protected function baseMouseOver(e:MouseEvent):void
 		{
 			//trace( "[BASERICH] Mouse Over");
 			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.MOUSE_OVER ) );
 		}
 		
-		private function baseMouseOut(e:MouseEvent):void
+		protected function baseMouseOut(e:MouseEvent):void
 		{
 			//trace( "[BASERICH] Mouse Out");
 			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.MOUSE_OUT ) );
