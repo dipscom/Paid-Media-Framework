@@ -13,9 +13,9 @@ package com.pedrotavares.paidmedia.platforms.doubleclick {
 	
 	public class RichVideo extends RichUnit { 
 		// Video Vars
-		private var vidPlayerInstance	: VideoPlayerAdvanced; 
+		protected var vidPlayerInstance		: VideoPlayerAdvanced; 
 		//private var playlist			:Playlist;
-		private var _videoController	: EnhancedVideoController; // Move this into a function so can be created multiple times
+		protected var _videoController		: EnhancedVideoController; // Move this into a function so can be created multiple times
 		protected var isVidPlaying		: Boolean; // Look into changing this into a call to the videoPlayerInstance
 		protected var isMuted			: Boolean; // Look into changing this into a call to the videoPlayerInstance
 		protected var vids				: Array; // Maybe an obejct? Look into it - Its attributes to replace the bellow
