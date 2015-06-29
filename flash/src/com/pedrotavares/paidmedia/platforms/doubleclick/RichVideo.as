@@ -13,9 +13,9 @@ package com.pedrotavares.paidmedia.platforms.doubleclick {
 	
 	public class RichVideo extends RichUnit { 
 		// Video Vars
-		protected var vidPlayerInstance		: VideoPlayerAdvanced; 
+		protected var vidPlayerInstance	: VideoPlayerAdvanced; 
 		//private var playlist			:Playlist;
-		protected var _videoController		: EnhancedVideoController; // Move this into a function so can be created multiple times
+		protected var _videoController	: EnhancedVideoController; // Move this into a function so can be created multiple times
 		protected var isVidPlaying		: Boolean; // Look into changing this into a call to the videoPlayerInstance
 		protected var isMuted			: Boolean; // Look into changing this into a call to the videoPlayerInstance
 		protected var vids				: Array; // Maybe an obejct? Look into it - Its attributes to replace the bellow
@@ -87,6 +87,8 @@ package com.pedrotavares.paidmedia.platforms.doubleclick {
 				vidRply.addEventListener(MouseEvent.MOUSE_OVER, videoMouseOut);
 				vidRply.buttonMode = true;
 				vidRply.mouseChildren = false;
+				// Hide it to begin with
+				vidRply.visible = false;
 			}
 		}
 
@@ -195,6 +197,8 @@ package com.pedrotavares.paidmedia.platforms.doubleclick {
 			vidPlayerInstance.visible = true;
 			// The video is now playing
 			isVidPlaying = true;
+			// Hide the replay button
+			vidRply.visible = false;
 			// Unmute the video if muted
 			if (_videoController.getVolume() == 0) {
 				unmuteVideo();
@@ -244,6 +248,8 @@ package com.pedrotavares.paidmedia.platforms.doubleclick {
 			trace("[VIDEO] Video is now over");
 			// Video is no longer playing
 			isVidPlaying = false;
+			// Show the replay button
+			vidRply.visible = true;
 			// Dispatch the event to be heard
 			dispatchEvent(new PaidMediaEvent(PaidMediaEvent.ON_VIDEO_END));
 		}
