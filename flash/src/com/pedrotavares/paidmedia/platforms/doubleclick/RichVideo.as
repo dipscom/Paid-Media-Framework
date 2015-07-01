@@ -197,8 +197,10 @@ package com.pedrotavares.paidmedia.platforms.doubleclick {
 			vidPlayerInstance.visible = true;
 			// The video is now playing
 			isVidPlaying = true;
-			// Hide the replay button
-			vidRply.visible = false;
+			if(vidRply){
+				// Hide the replay button
+				vidRply.visible = false;
+			}
 			// Unmute the video if muted
 			if (_videoController.getVolume() == 0) {
 				unmuteVideo();
@@ -248,8 +250,10 @@ package com.pedrotavares.paidmedia.platforms.doubleclick {
 			trace("[VIDEO] Video is now over");
 			// Video is no longer playing
 			isVidPlaying = false;
-			// Show the replay button
-			vidRply.visible = true;
+			if(vidRply){
+				// Show the replay button
+				vidRply.visible = true;
+			}
 			// Dispatch the event to be heard
 			dispatchEvent(new PaidMediaEvent(PaidMediaEvent.ON_VIDEO_END));
 		}
