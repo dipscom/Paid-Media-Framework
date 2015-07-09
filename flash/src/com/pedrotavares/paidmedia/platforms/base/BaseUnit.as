@@ -2,6 +2,8 @@
 	import com.pedrotavares.paidmedia.events.PaidMediaEvent;
 	import flash.display.*;
 	import flash.events.MouseEvent;
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
 	
 	public class BaseUnit extends Sprite {
 		
@@ -62,15 +64,12 @@
 		*	Mouse Methods 
 		*
 		**********************/
-		private function baseClick( e:MouseEvent ):void
+		protected function baseClick( e:MouseEvent ):void
 		{ 
 			trace("[BASE_UNIT] Click");
-			// Check to see if the target was the main clicktag
-			if( e.target.name == "clicktag_mc" )
-			{
-				dispatchEvent( new PaidMediaEvent( PaidMediaEvent.CLICK_CLICKTAG ) );
-			} else {
-				dispatchEvent( new PaidMediaEvent( PaidMediaEvent.MOUSE_CLICK ) );
+			var click_url:String = root.loaderInfo.parameters.clickTag;
+			if(click_url) {
+				navigateToURL(new URLRequest(click_url), '_blank');
 			}
 		}
 		
