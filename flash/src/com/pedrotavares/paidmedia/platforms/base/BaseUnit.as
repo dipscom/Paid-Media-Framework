@@ -1,28 +1,34 @@
 ﻿package com.pedrotavares.paidmedia.platforms.base {
+	// CUSTOM IMPORTS
 	import com.pedrotavares.paidmedia.events.PaidMediaEvent;
+	// FLASH IMPORTS
 	import flash.display.*;
 	import flash.events.MouseEvent;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
-	
+
 	public class BaseUnit extends Sprite {
-		
+
 		// Variable to hold the instance of the clicktag
-		public var 		clicktag_mc					:Sprite;
+		public var 		clicktag_mc					:MovieClip;
 
 		public function BaseStd() {
 			// Wait for setupAd()
 		}
-		
+
 		protected function setupAd( brdr_clr:uint=0x000000, brdr:Boolean=true, w:Number=0, h:Number=0 ):void {
+			/* TO DO - REMOVE THIS if STATEMENT FROM HERE AND ONLY OVERWRITE ON
+				UNITS THAT NEED A DIFFERENT SIZED BORDER */
 			// Check to see if there is w and h are being overriden
 			if( w === 0 || h === 0 ) {
 				// If w and h are zero,
 				// Use the stage's width and height
 				w = stage.stageWidth;
 				h = stage.stageHeight;
-			} 
-			
+			}
+
+			/* TO DO - REMOVE THIS if STATEMENT FROM HERE AND ONLY OVERWRITE ON
+				UNITS THAT NEED A CHECK FOR BORDER */
 			// Check to see if border is required
 			if( brdr )
 			{
@@ -31,7 +37,7 @@
 				border.graphics.lineStyle(1, brdr_clr, 1, true, "normal", "none", "miter");
 				border.graphics.drawRect(0, 0, w-1, h-1);
 				addChild(border);
-				trace("[BASE_UNIT], Drawing border:", w, h);
+				//if(dbug) trace("[BASE_UNIT], Drawing border:", w, h);
 			}
 			// Initiate the main clicktag
 			clicktag_mc = new MovieClip();
@@ -45,43 +51,41 @@
 			setAsButton(clicktag_mc);
 			// Add the clicktag_mc to the stage
 			addChild(clicktag_mc);
-			
-			trace( "[BASE_UNIT] Dispatch UNIT_INITIALISED");
-			// Dispatch the start of the ad
-			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.UNIT_INITIALISED ) );
 		}
-	
-		private function setAsButton(btn:Sprite):void {
-			btn.addEventListener(MouseEvent.CLICK, baseClick);
-			btn.addEventListener(MouseEvent.MOUSE_OVER, baseMouseOver);
-			btn.addEventListener(MouseEvent.MOUSE_OUT, baseMouseOut);
+
+		protected function setAsButton(btn:MovieClip):void {
+			btn.addEventListener(MouseEvent.CLICK, onClick);
+			btn.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			btn.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 			btn.buttonMode = true;
 			btn.mouseChildren = false;
 		}
-		
+
 		/********************
-		* 
-		*	Mouse Methods 
+		*
+		*	Mouse Methods
 		*
 		**********************/
-		protected function baseClick( e:MouseEvent ):void
-		{ 
-			trace("[BASE_UNIT] Click");
+		protected function onClick(e:MouseEvent):void
+		{
+			//trace("[BASE_UNIT] Click ", e.currentTarget.name);
 			var click_url:String = root.loaderInfo.parameters.clickTag;
 			if(click_url) {
 				navigateToURL(new URLRequest(click_url), '_blank');
+			} else {
+				trace("No url present");
 			}
 		}
-		
-		private function baseMouseOver(e:MouseEvent):void
+
+		private function onMouseOver(e:MouseEvent):void
 		{
-			trace( "[BASE_UNIT] Mouse Over ", e.currentTarget.name);
+			//trace( "[BASE_UNIT] Mouse Over ", e.currentTarget.name);
 			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.MOUSE_OVER ) );
 		}
-		
-		private function baseMouseOut(e:MouseEvent):void
+
+		private function onMouseOut(e:MouseEvent):void
 		{
-			trace( "[BASE_UNIT] Mouse Out ", e.currentTarget.name);
+			//trace( "[BASE_UNIT] Mouse Out ", e.currentTarget.name);
 			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.MOUSE_OUT ) );
 		}
 	}

@@ -1,0 +1,19 @@
+﻿richUnit.swf Movie Report
+---------------------------
+
+Frame #    Frame Bytes    Total Bytes    Scene
+-------    -----------    -----------    -----
+      1             47             47    Scene 1 (AS 3.0 Classes Export Frame)
+      2           1199           1246    
+
+Scene      Shape Bytes    Text Bytes    ActionScript Bytes
+-------    -----------    ----------    ------------------
+Scene 1              0            39                     0
+
+Font Name    Bytes         Characters
+---------    ----------    ----------
+ArialMT            1147    Scesu
+
+
+
+

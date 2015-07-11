@@ -1,18 +1,14 @@
 package com.pedrotavares.paidmedia.platforms.base
 {
-	// CUSTOM CLASSE IMPORTS
+	// CUSTOM IMPORTS
+	import com.pedrotavares.paidmedia.platforms.base;
 	import com.pedrotavares.paidmedia.events.PaidMediaEvent;
 	// FLASH IMPORTS
 	import flash.display.*;
 	import flash.events.*;
 
-	public class BaseRich extends MovieClip
+	public class BaseRich extends BaseUnit
 	{
-		/********************
-			TO DO:
-			
-		**********************/
-		
 		// Variable to hold the instance of the clicktag
 		protected var 		clicktag_mc					:MovieClip;
 
@@ -21,14 +17,14 @@ package com.pedrotavares.paidmedia.platforms.base
 			trace( "[BASERICH] All good, wait for setupAd()");
 			// Do nothing, wait for the setupAd() to be called
 		}
-		
+
 		/********************
-		* 
-		*	Mouse Methods 
+		*
+		*	Mouse Methods
 		*
 		**********************/
 		protected function baseClick( e:MouseEvent ):void
-		{ 
+		{
 			trace("[BASERICH] Click");
 			// Check to see if the target was the main clicktag
 			if( e.target.name == "clicktag_mc" )
@@ -38,22 +34,22 @@ package com.pedrotavares.paidmedia.platforms.base
 				dispatchEvent( new PaidMediaEvent( PaidMediaEvent.MOUSE_CLICK ) );
 			}
 		}
-		
+
 		protected function baseMouseOver(e:MouseEvent):void
 		{
 			//trace( "[BASERICH] Mouse Over");
 			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.MOUSE_OVER ) );
 		}
-		
+
 		protected function baseMouseOut(e:MouseEvent):void
 		{
 			//trace( "[BASERICH] Mouse Out");
 			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.MOUSE_OUT ) );
 		}
-		
-		
+
+
 		/********************
-		* 
+		*
 		*	 Setup Methods
 		*
 		**********************/
@@ -65,8 +61,8 @@ package com.pedrotavares.paidmedia.platforms.base
 				// Use the stage's width and height
 				w = stage.stageWidth;
 				h = stage.stageHeight;
-			} 
-			
+			}
+
 			// Check to see if border is required
 			if( brdr )
 			{
@@ -89,12 +85,12 @@ package com.pedrotavares.paidmedia.platforms.base
 			addButtonBehaviour(clicktag_mc);
 			// Add the clicktag_mc to the stage
 			addChild(clicktag_mc);
-			
+
 			trace( "[BASERICH] Dispatch UNIT_INITIALISED");
 			// Dispatch the start of the ad
 			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.UNIT_INITIALISED ) );
 		}
-		
+
 		private function onStage( e:Event ):void
 		{
 			trace( "[BASERICH] On Stage");
@@ -103,7 +99,7 @@ package com.pedrotavares.paidmedia.platforms.base
 			// Start the setup of the ad
 			startSetup();// TO DO >>>>> This needs some params
 		}
-		
+
 		protected function setupAd( brdr_clr:uint=0x000000, brdr:Boolean=true, w:Number=0, h:Number=0 ):void
 		{
 			trace("[BASERICH] setupAd");
@@ -120,10 +116,10 @@ package com.pedrotavares.paidmedia.platforms.base
 				addEventListener( Event.ADDED_TO_STAGE, onStage );
 			}
 		}
-		
-		
+
+
 		/********************
-		* 
+		*
 		*	 Helper Methods
 		*
 		**********************/
@@ -133,7 +129,7 @@ package com.pedrotavares.paidmedia.platforms.base
 			btn.addEventListener(MouseEvent.MOUSE_OUT, baseMouseOut);
 			btn.buttonMode = true;
 		}
-		
+
 		protected function reOrderButtons(arr:Array):void {
 			// Loop thru the given array
 			for( var i:int = 0; i < arr.length; i++ ) {
