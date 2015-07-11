@@ -7,7 +7,7 @@
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 
-	public class BaseUnit extends Sprite {
+	public class BaseUnit extends MovieClip {
 
 		// Variable to hold the instance of the clicktag
 		public var 		clicktag_mc					:MovieClip;
@@ -16,6 +16,12 @@
 			// Wait for setupAd()
 		}
 
+
+		/********************
+		*
+		*	 Setup Methods
+		*
+		**********************/
 		protected function setupAd( brdr_clr:uint=0x000000, brdr:Boolean=true, w:Number=0, h:Number=0 ):void {
 			/* TO DO - REMOVE THIS if STATEMENT FROM HERE AND ONLY OVERWRITE ON
 				UNITS THAT NEED A DIFFERENT SIZED BORDER */
@@ -30,8 +36,7 @@
 			/* TO DO - REMOVE THIS if STATEMENT FROM HERE AND ONLY OVERWRITE ON
 				UNITS THAT NEED A CHECK FOR BORDER */
 			// Check to see if border is required
-			if( brdr )
-			{
+			if( brdr ) {
 				// Draw a one pixel border automatically
 				var border = new Shape();
 				border.graphics.lineStyle(1, brdr_clr, 1, true, "normal", "none", "miter");
@@ -61,13 +66,13 @@
 			btn.mouseChildren = false;
 		}
 
+
 		/********************
 		*
 		*	Mouse Methods
 		*
 		**********************/
-		protected function onClick(e:MouseEvent):void
-		{
+		protected function onClick(e:MouseEvent):void {
 			//trace("[BASE_UNIT] Click ", e.currentTarget.name);
 			var click_url:String = root.loaderInfo.parameters.clickTag;
 			if(click_url) {
@@ -77,14 +82,12 @@
 			}
 		}
 
-		private function onMouseOver(e:MouseEvent):void
-		{
+		private function onMouseOver(e:MouseEvent):void {
 			//trace( "[BASE_UNIT] Mouse Over ", e.currentTarget.name);
 			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.MOUSE_OVER ) );
 		}
 
-		private function onMouseOut(e:MouseEvent):void
-		{
+		private function onMouseOut(e:MouseEvent):void {
 			//trace( "[BASE_UNIT] Mouse Out ", e.currentTarget.name);
 			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.MOUSE_OUT ) );
 		}
