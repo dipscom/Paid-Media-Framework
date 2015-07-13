@@ -1,5 +1,4 @@
-﻿package com.pedrotavares.paidmedia.platforms.base
-{
+﻿package com.pedrotavares.paidmedia.platforms.base {
 	// CUSTOM IMPORTS
 	import com.pedrotavares.paidmedia.platforms.base.BaseUnit;
 	import com.pedrotavares.paidmedia.events.PaidMediaEvent;
@@ -10,7 +9,7 @@
 	public class BaseRich extends BaseUnit {
 
 		public function BaseRich():void {
-			//trace( "[BASERICH] All good, wait for setupAd()");
+			if(dbug) trace( "[BASERICH] All good, wait for setupAd()");
 			// Do nothing, wait for the setupAd() to be called
 		}
 
