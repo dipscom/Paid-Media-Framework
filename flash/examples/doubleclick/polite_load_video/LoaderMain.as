@@ -1,1 +1,0 @@
-﻿package {	import com.pedrotavares.paidmedia.platforms.doubleclick.*;	public class LoaderMain extends PoliteLoader	{		public function LoaderMain()		{			//trace("[MAIN] All good");			// The bellow string should be the name of the child swf to load and the date to use			politeLoad("doubleclick_video.swf", holder_mc );		}	}}
