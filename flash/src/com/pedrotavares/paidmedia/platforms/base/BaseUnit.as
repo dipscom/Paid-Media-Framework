@@ -1,5 +1,6 @@
 ﻿package com.pedrotavares.paidmedia.platforms.base {
 	// CUSTOM IMPORTS
+	import com.pedrotavares.paidmedia.platforms.base.BaseDbug;
 	import com.pedrotavares.paidmedia.events.PaidMediaEvent;
 	// FLASH IMPORTS
 	import flash.display.*;
@@ -7,7 +8,7 @@
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 
-	public class BaseUnit extends MovieClip {
+	public class BaseUnit extends BaseDbug {
 
 		// Variable to hold the instance of the clicktag
 		public var 		clicktag_mc					:MovieClip;
@@ -42,7 +43,8 @@
 				border.graphics.lineStyle(1, brdr_clr, 1, true, "normal", "none", "miter");
 				border.graphics.drawRect(0, 0, w-1, h-1);
 				addChild(border);
-				//if(dbug) trace("[BASE_UNIT], Drawing border:", w, h);
+				// NOTE: dbug var comes from BaseDbug.as 
+				if(dbug) trace("[BASE_UNIT], Drawing border:", w, h);
 			}
 			// Initiate the main clicktag
 			clicktag_mc = new MovieClip();
@@ -73,7 +75,7 @@
 		*
 		**********************/
 		protected function onClick(e:MouseEvent):void {
-			//trace("[BASE_UNIT] Click ", e.currentTarget.name);
+			if(dbug) trace("[BASE_UNIT] Click ", e.currentTarget.name);
 			var click_url:String = root.loaderInfo.parameters.clickTag;
 			if(click_url) {
 				navigateToURL(new URLRequest(click_url), '_blank');
@@ -83,12 +85,12 @@
 		}
 
 		private function onMouseOver(e:MouseEvent):void {
-			//trace( "[BASE_UNIT] Mouse Over ", e.currentTarget.name);
+			if(dbug) trace( "[BASE_UNIT] Mouse Over ", e.currentTarget.name);
 			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.MOUSE_OVER ) );
 		}
 
 		private function onMouseOut(e:MouseEvent):void {
-			//trace( "[BASE_UNIT] Mouse Out ", e.currentTarget.name);
+			if(dbug) trace( "[BASE_UNIT] Mouse Out ", e.currentTarget.name);
 			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.MOUSE_OUT ) );
 		}
 	}

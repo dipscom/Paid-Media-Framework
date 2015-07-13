@@ -9,15 +9,9 @@
 
 	public class BaseRich extends BaseUnit {
 
-		protected var dbug :Boolean = false;
-
 		public function BaseRich():void {
 			//trace( "[BASERICH] All good, wait for setupAd()");
 			// Do nothing, wait for the setupAd() to be called
-		}
-
-		protected function doTrace(dbug):void {
-			this.dbug = dbug;
 		}
 
 
@@ -30,6 +24,7 @@
 			// Bring in the functionality of the overriden function
 			// TO DO //
 			super.setupAd(brdr_clr, brdr, w, h);
+			// NOTE: dbug var comes from BaseDbug.as 
 			if(dbug) trace( "[BASERICH] Dispatch UNIT_INITIALISED");
 			// Dispatch the start of the ad
 			dispatchEvent( new PaidMediaEvent( PaidMediaEvent.UNIT_INITIALISED ) );

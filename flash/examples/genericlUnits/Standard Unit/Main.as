@@ -10,6 +10,8 @@
 		
 		
 		public function Main() {
+			// Enable trace
+			doTrace(true);
 			// Wait until unit is displayed
 			addEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
