@@ -1,4 +1,4 @@
-package com.pedrotavares.paidmedia.platforms.base
+﻿package com.pedrotavares.paidmedia.platforms.base
 {
 	// CUSTOM IMPORTS
 	import com.pedrotavares.paidmedia.platforms.base.BaseUnit;
@@ -16,7 +16,7 @@ package com.pedrotavares.paidmedia.platforms.base
 			// Do nothing, wait for the setupAd() to be called
 		}
 
-		protected function doTrace(dbug) {
+		protected function doTrace(dbug):void {
 			this.dbug = dbug;
 		}
 
